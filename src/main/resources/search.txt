@@ -1,0 +1,97 @@
+{
+  "from" : 0,
+  "size" : 50,
+  "query" : {
+    "bool" : {
+      "must" : [
+        {
+          "match_all" : {
+            "boost" : 1.0
+          }
+        }
+      ],
+      "filter" : [
+        {
+          "term" : {
+            "aggs.category" : {
+              "value" : "forsale",
+              "boost" : 1.0
+            }
+          }
+        },
+        {
+          "term" : {
+            "status" : {
+              "value" : "active",
+              "boost" : 1.0
+            }
+          }
+        },
+        {
+          "geo_distance" : {
+            "aggs.location" : [
+              -77.242985,
+              39.180776
+            ],
+            "distance" : 804672.0,
+            "distance_type" : "sloppy_arc",
+            "validation_method" : "STRICT",
+            "ignore_unmapped" : false,
+            "boost" : 1.0
+          }
+        }
+      ],
+      "disable_coord" : false,
+      "adjust_pure_negative" : true,
+      "boost" : 1.0
+    }
+  },
+  "sort" : [
+    {
+      "aggs.lastUpdated" : {
+        "order" : "desc",
+        "missing" : "_last",
+        "unmapped_type" : "date"
+      }
+    }
+  ],
+  "aggregations" : {
+    "category" : {
+      "terms" : {
+        "field" : "aggs.category",
+        "size" : 100,
+        "shard_size" : 10,
+        "min_doc_count" : 1,
+        "shard_min_doc_count" : 0,
+        "show_term_doc_count_error" : false,
+        "order" : [
+          {
+            "_count" : "desc"
+          },
+          {
+            "_term" : "asc"
+          }
+        ]
+      }
+    },
+    "subCategory" : {
+      "terms" : {
+        "field" : "aggs.subCategory",
+        "size" : 100,
+        "shard_size" : 10,
+        "min_doc_count" : 1,
+        "shard_min_doc_count" : 0,
+        "show_term_doc_count_error" : false,
+        "order" : [
+          {
+            "_count" : "desc"
+          },
+          {
+            "_term" : "asc"
+          }
+        ]
+      }
+    }
+  },
+  "ext" : { }
+}
