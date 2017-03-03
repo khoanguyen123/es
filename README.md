@@ -1,5 +1,5 @@
 # es
-ES sample
+ES sample: A Spring Boot application that uses Jest client to query data from ElasticSearch
 
 ### To build:
     Unix: gradlew clean build
